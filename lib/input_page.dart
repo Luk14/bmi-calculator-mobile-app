@@ -2,13 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'constants.dart';
 import 'icons/icon_content.dart';
 import 'icons/reusable_icon.dart';
-
-const bottomContainerHeight = 70.0;
-const activeCardColor = Color(0xFF1D1F33);
-const inactiveCardColor = Color(0xFF111328);
-const bottomContainerColor = Color(0xFFEB1555);
 
 enum Gender {
   male,
@@ -22,6 +18,7 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   Gender currentSelected;
+  int height = 180;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +27,7 @@ class _InputPageState extends State<InputPage> {
         title: Text('BMI CALCULATOR'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
             child: Row(
@@ -42,8 +40,8 @@ class _InputPageState extends State<InputPage> {
                       });
                     },
                     color: currentSelected == Gender.male
-                        ? activeCardColor
-                        : inactiveCardColor,
+                        ? kActiveCardColor
+                        : kInactiveCardColor,
                     cardChild: IconContent(
                       icon: FontAwesomeIcons.mars,
                       text: 'MALE',
@@ -58,8 +56,8 @@ class _InputPageState extends State<InputPage> {
                       });
                     },
                     color: currentSelected == Gender.female
-                        ? activeCardColor
-                        : inactiveCardColor,
+                        ? kActiveCardColor
+                        : kInactiveCardColor,
                     cardChild: IconContent(
                       icon: FontAwesomeIcons.venus,
                       text: 'FEMALE',
@@ -70,25 +68,63 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           Expanded(
-            child: ReusableWidget(color: activeCardColor),
+            child: ReusableWidget(
+              color: kActiveCardColor,
+              cardChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'HEIGHT',
+                    style: kLabelTextStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: <Widget>[
+                      Text(
+                        height.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                      Text(
+                        'cm',
+                        style: kLabelTextStyle,
+                      ),
+                    ],
+                  ),
+                  Slider(
+                    value: height.toDouble(),
+                    min: kMinimumHeight.toDouble(),
+                    max: kMaximumHeight.toDouble(),
+                    activeColor: kActiveSliderColor,
+                    inactiveColor: kInactiveSliderColor,
+                    onChanged: (double value) {
+                      setState(() {
+                        height = value.toInt();
+                      });
+                    },
+                  )
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: ReusableWidget(color: activeCardColor),
+                  child: ReusableWidget(color: kActiveCardColor),
                 ),
                 Expanded(
-                  child: ReusableWidget(color: activeCardColor),
+                  child: ReusableWidget(color: kActiveCardColor),
                 ),
               ],
             ),
           ),
           Container(
-            color: bottomContainerColor,
+            color: kBottomContainerColor,
             margin: EdgeInsets.only(top: 10),
             width: double.infinity,
-            height: bottomContainerHeight,
+            height: kBottomContainerHeight,
           ),
         ],
       ),
